@@ -1,3 +1,7 @@
+.invisible-footer {
+  opacity: 0;
+  pointer-events: none;
+}
 /* Work Experience Panel: Date highlight */
 .work-item .work-dates {
   color: var(--accent);
@@ -248,18 +252,16 @@ body {
 
 .gallery {
   background: rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Carousel-style gallery: horizontal scrolling with snap */
 .gallery .carousel {
   position: relative;
   max-height: 80vh;
+  overflow: visible;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 
@@ -307,11 +309,8 @@ body {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: none;
-  width: 44px;
-  height: 44px;
+  background: rgba(0,0,0,0.3);
+  /* Remove flexbox centering so carousel dots always show */
   border-radius: 50%;
   display: flex;
   align-items: center;
