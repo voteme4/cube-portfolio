@@ -20,47 +20,45 @@
       <button class="nav-dot" data-panel="gallery" aria-label="Go to photo gallery"></button>
     </nav>
 
-    <main class="panels">
-      <!-- Introduction Panel -->
-      <section id="intro" class="panel intro">
-        <div class="panel-content intro-inner">
-          <div class="intro-text">
-            <h1>Hi — I'm Zach</h1>
-            <p class="lead">I'm a student at Colby College studying Computer Science and Statistics.</p>
-            <p>I enjoy reading and spending time in nature. I have selected some photographs from a recent trip to the Coastal Maine Botanical Gardens to share with you.</p>
+    <div class="cube-container">
+      <div class="cube">
+        <!-- Introduction Panel (Front) -->
+        <section id="intro" class="panel intro cube-face cube-front">
+          <div class="panel-content intro-inner">
+            <div class="headshot-wrap" aria-hidden="false">
+              <img id="headshot" class="headshot" src="images/headshot.jpg" alt="Zachary Berg — headshot">
+            </div>
+            <div class="intro-text">
+              <h1>Hi — I'm Zach</h1>
+              <p class="lead">I'm a student at Colby College studying Computer Science and Statistics.</p>
+              <p>I enjoy reading and spending time in nature. I have selected some photographs from a recent trip to the Coastal Maine Botanical Gardens to share with you.</p>
+            </div>
           </div>
+        </section>
 
-          <div class="headshot-wrap" aria-hidden="false">
-            <!-- Replace the src with your headshot path and add descriptive alt text -->
-            <img id="headshot" class="headshot" src="images/headshot.jpg" alt="Zachary Berg — headshot">
+        <!-- Projects Panel (Bottom) -->
+        <section id="projects" class="panel projects cube-face cube-bottom">
+          <div class="panel-content">
+            <h2>Selected Projects</h2>
+            <div class="project-grid">
+              <article class="project-card">
+                <h3>MERN Chat App</h3>
+                <p>This is a simple web app in the MERN stack that I built to learn about frontend development.</p>
+                <div class="tags">HTML • CSS • JavaScript</div>
+                <a href="https://github.com/voteme4/ChatApp" class="project-link">View project →</a>
+              </article>
+              <article class="project-card">
+                <h3>TA Hours</h3>
+                <p>I built this project in a team of 3 to help the Computer Science department at my school better manage teaching assitant hours.</p>
+                <div class="tags">MongoDB • React • GoFiber</div>
+                <a href="https://github.com/sbdoore/TAHours" class="project-link">View project →</a>
+              </article>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Projects Panel -->
-      <section id="projects" class="panel projects">
-        <div class="panel-content">
-          <h2>Selected Projects</h2>
-          <div class="project-grid">
-            <article class="project-card">
-              <h3>MERN Chat App</h3>
-              <p>This is a simple web app in the MERN stack that I built to learn about frontend development.</p>
-              <div class="tags">HTML • CSS • JavaScript</div>
-              <a href="https://github.com/voteme4/ChatApp" class="project-link">View project →</a>
-            </article>
-
-            <article class="project-card">
-              <h3>TA Hours</h3>
-              <p>I built this project in a team of 3 to help the Computer Science department at my school better manage teaching assitant hours.</p>
-              <div class="tags">MongoDB • React • GoFiber</div>
-              <a href="https://github.com/sbdoore/TAHours" class="project-link">View project →</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Work Experience Panel -->
-      <section id="work" class="panel work">
+        <!-- Work Experience Panel (Back) -->
+        <section id="work" class="panel work cube-face cube-back">
           <div class="panel-content">
             <h2>Work Experience</h2>
             <div class="work-list work-columns">
@@ -72,7 +70,6 @@
                   <li>Developed concise, persuasive presentations on business analytics for high-ranking executives, informing decisions on future operations.</li>
                 </ul>
               </article>
-
               <article class="work-item">
                 <h3>Software Engineering Intern</h3>
                 <p class="muted">Lion King Adventures<br>Arusha, Tanzania (Remote)<br><span class="work-dates">January 2025</span></p>
@@ -80,10 +77,8 @@
                   <li>Streamlined hotel and room information access, saving 1–5 hours weekly for each sales team member, via MERN stack database.</li>
                   <li>Organized hundreds of hotels and thousands of rooms in MongoDB to optimize sales workflow.</li>
                   <li>Rapidly deployed multi-container web app on Linode server using Docker Compose and Git, minimizing server costs.</li>
-                  <li>Led client meetings and a team of 3 to incorporate feedback, developing a product tailored to employer needs.</li>
                 </ul>
               </article>
-
               <article class="work-item">
                 <h3>Student Teaching Assistant</h3>
                 <p class="muted">Colby Computer Science Department<br>Waterville, ME<br><span class="work-dates">February 2024 - Present</span></p>
@@ -95,10 +90,10 @@
               </article>
             </div>
           </div>
-      </section>
+        </section>
 
-      <!-- Photo Gallery Panels -->
-        <section id="gallery" class="panel gallery">
+        <!-- Photo Gallery Panel (Top) -->
+        <section id="gallery" class="panel gallery cube-face cube-top">
           <div class="panel-content">
             <h2>Photography</h2>
             <div class="carousel">
@@ -113,6 +108,8 @@
             </div>
           </div>
         </section>
+      </div>
+    </div>
     <script src="js/carousel.js" defer></script>
   </body>
 </html>
