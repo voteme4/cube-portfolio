@@ -349,7 +349,7 @@ body {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 98.5vw;
+  width: 100vw;
   pointer-events: none;
   z-index: 1000;
 }
