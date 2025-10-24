@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Zachary Berg — Portfolio</title>
+    <meta name="description" content="Portfolio — projects, about and contact" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <nav class="panel-nav">
+      <button class="nav-dot" data-panel="intro" aria-label="Go to introduction"></button>
+      <button class="nav-dot" data-panel="projects" aria-label="Go to projects"></button>
+      <button class="nav-dot" data-panel="work" aria-label="Go to work experience"></button>
+      <button class="nav-dot" data-panel="gallery" aria-label="Go to photo gallery"></button>
+    </nav>
+
+    <main class="panels">
+      <!-- Introduction Panel -->
+      <section id="intro" class="panel intro">
+        <div class="panel-content intro-inner">
+          <div class="intro-text">
+            <h1>Hi — I'm Zach</h1>
+            <p class="lead">I'm a student at Colby College studying Computer Science and Statistics.</p>
+            <p>I enjoy reading and spending time in nature. I have selected some photographs from a recent trip to the Coastal Maine Botanical Gardens to share with you.</p>
+          </div>
+
+          <div class="headshot-wrap" aria-hidden="false">
+            <!-- Replace the src with your headshot path and add descriptive alt text -->
+            <img id="headshot" class="headshot" src="images/headshot.jpg" alt="Zachary Berg — headshot">
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Panel -->
+      <section id="projects" class="panel projects">
+        <div class="panel-content">
+          <h2>Selected Projects</h2>
+          <div class="project-grid">
+            <article class="project-card">
+              <h3>MERN Chat App</h3>
+              <p>This is a simple web app in the MERN stack that I built to learn about frontend development.</p>
+              <div class="tags">HTML • CSS • JavaScript</div>
+              <a href="https://github.com/voteme4/ChatApp" class="project-link">View project →</a>
+            </article>
+
+            <article class="project-card">
+              <h3>TA Hours</h3>
+              <p>I built this project in a team of 3 to help the Computer Science department at my school better manage teaching assitant hours.</p>
+              <div class="tags">MongoDB • React • GoFiber</div>
+              <a href="https://github.com/sbdoore/TAHours" class="project-link">View project →</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Work Experience Panel -->
+      <section id="work" class="panel work">
+          <div class="panel-content">
+            <h2>Work Experience</h2>
+            <div class="work-list work-columns">
+              <article class="work-item">
+                <h3>Business Analyst Intern</h3>
+                <p class="muted">Carmax Auto Finance<br>Atlanta, GA<br><span class="work-dates">June - August 2025</span></p>
+                <ul>
+                  <li>Refined fraud detection system to target 50% of prior applications while still addressing 90% of problematic cases, using Excel and SQL data processing. Projected monthly profits increased by at least $200k.</li>
+                  <li>Developed concise, persuasive presentations on business analytics for high-ranking executives, informing decisions on future operations.</li>
+                </ul>
+              </article>
+
+              <article class="work-item">
+                <h3>Software Engineering Intern</h3>
+                <p class="muted">Lion King Adventures<br>Arusha, Tanzania (Remote)<br><span class="work-dates">January 2025</span></p>
+                <ul>
+                  <li>Streamlined hotel and room information access, saving 1–5 hours weekly for each sales team member, via MERN stack database.</li>
+                  <li>Organized hundreds of hotels and thousands of rooms in MongoDB to optimize sales workflow.</li>
+                  <li>Rapidly deployed multi-container web app on Linode server using Docker Compose and Git, minimizing server costs.</li>
+                  <li>Led client meetings and a team of 3 to incorporate feedback, developing a product tailored to employer needs.</li>
+                </ul>
+              </article>
+
+              <article class="work-item">
+                <h3>Student Teaching Assistant</h3>
+                <p class="muted">Colby Computer Science Department<br>Waterville, ME<br><span class="work-dates">February 2024 – Present</span></p>
+                <ul>
+                  <li>Assisted 20+ students per shift with computer science projects, homework, and concepts.</li>
+                  <li>Mentored students in Java, Python, VHDL, debugging, and programming fundamentals.</li>
+                  <li>Taught topics including bash, binary arithmetic, circuit design, error interpretation, and machine learning.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+      </section>
+
+      <!-- Photo Gallery Panels -->
+        <section id="gallery" class="panel gallery">
+          <div class="panel-content">
+            <h2>Photography</h2>
+            <div class="carousel">
+              <div class="photo-grid">
+                <figure class="photo"><img loading="lazy" src="images/flower.jpg" alt="A lettuce like flower with green petals that grow to purple towards the center"></figure>
+                <figure class="photo"><img loading="lazy" src="images/pool.jpg" alt="Sunlit rocks with pool of water"></figure>
+                <figure class="photo"><img loading="lazy" src="images/algae.jpg" alt="Algae on a marshy body of water"></figure>
+                <figure class="photo portrait"><img loading="lazy" src="images/waterfall.jpg" alt="A waterfall into a small rocky pond surrounded by pumpkins and greenery"></figure>
+                <figure class="photo"><img loading="lazy" src="images/pumpkins.jpg" alt="5 pumkins in a row pumpkins in a bed of flowers with a few other pumpkins placed throughout the frame"></figure>
+                <figure class="photo"><img loading="lazy" src="images/deer.jpg" alt="2 deer sculptures made out of metal pipes"></figure>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="site-footer">
+        <div class="container">
+            <small>© <span id="year"></span> Zachary Berg</small>
+        </div>
+        </footer>
+    <script src="js/carousel.js" defer></script>
+  </body>
+</html>
