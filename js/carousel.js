@@ -4,79 +4,128 @@
 // Update year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Panel navigation (sidebar dots)
-const panels = document.querySelectorAll('.panel');
+// 3D Cube Navigation (vertical)
+const cube = document.querySelector('.cube');
+const faces = ['intro', 'projects', 'work', 'gallery'];
 const dots = document.querySelectorAll('.nav-dot');
+const cubeFaces = document.querySelectorAll('.cube-face');
+let currentIndex = 0;
+let lastAngle = 0;
 
-// Update active dot based on scroll position
-const observerOptions = { root: null, threshold: 0.7 };
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const panelId = entry.target.id;
-      updateActiveDot(panelId);
-    }
-  });
-}, observerOptions);
-panels.forEach(panel => observer.observe(panel));
-
-function updateActiveDot(panelId) {
-  dots.forEach(dot => dot.classList.toggle('active', dot.dataset.panel === panelId));
+function rotateCube(index) {
+  // Always rotate the shortest direction
+  let diff = index - currentIndex;
+  // Handle wrap-around for shortest path
+  if (diff > 2) diff -= 4;
+  if (diff < -2) diff += 4;
+  lastAngle += diff * -90;
+  cube.style.transform = `rotateX(${lastAngle}deg)`;
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+  cubeFaces.forEach((face, i) => face.classList.toggle('active', i === index));
+  currentIndex = index;
 }
 
-// Smooth scroll to panel when clicking sidebar dots
-dots.forEach(dot => {
+// Dot navigation
+dots.forEach((dot, i) => {
   dot.addEventListener('click', () => {
-    const targetId = dot.dataset.panel;
-    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+    rotateCube(i);
   });
 });
 
-// Optional: Hide/show navigation dots based on scroll
-let lastScrollY = window.scrollY;
-const nav = document.querySelector('.panel-nav');
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const isScrollingDown = scrollY > lastScrollY;
-  if (nav) nav.style.opacity = isScrollingDown ? '0.3' : '1';
-  lastScrollY = scrollY;
+// Scroll navigation (wheel) - only rotate cube if not inside gallery carousel
+window.addEventListener('wheel', (e) => {
+  // If the event target is inside a .photo-grid, do not rotate cube
+  let el = e.target;
+  while (el) {
+    if (el.classList && el.classList.contains('photo-grid')) return;
+    el = el.parentElement;
+  }
+  // Reduce sensitivity: require a larger deltaY to trigger rotation
+  const threshold = 60; // typical mouse wheel is ~100, trackpad is ~30
+  if (Math.abs(e.deltaY) < threshold) return;
+  // Debounce: only allow one rotation per wheel event
+  if (window.cubeRotating) return;
+  window.cubeRotating = true;
+  let nextIndex;
+  // Reverse scroll direction: scroll down goes to previous, up goes to next
+  if (e.deltaY > 0) {
+    nextIndex = (currentIndex - 1 + faces.length) % faces.length;
+  } else {
+    nextIndex = (currentIndex + 1) % faces.length;
+  }
+  rotateCube(nextIndex);
+  setTimeout(() => { window.cubeRotating = false; }, 500); // matches cube transition
 });
 
+// Keyboard navigation
+window.addEventListener('keydown', (e) => {
+  let nextIndex = currentIndex;
+  // Reverse arrow key direction: Down goes to previous, Up goes to next
+  if (e.key === 'ArrowDown') {
+    nextIndex = (currentIndex - 1 + faces.length) % faces.length;
+    rotateCube(nextIndex);
+  }
+  if (e.key === 'ArrowUp') {
+    nextIndex = (currentIndex + 1) % faces.length;
+    rotateCube(nextIndex);
+  }
+});
+
+// Initialize
+rotateCube(0);
+
 // --- Carousel initialization for gallery panels (with dots) ---
+
 document.querySelectorAll('.carousel').forEach(carousel => {
   const track = carousel.querySelector('.photo-grid');
   if (!track) return;
 
-  const slides = Array.from(track.querySelectorAll('.photo'));
+  let slides = Array.from(track.querySelectorAll('.photo'));
+  const slideCount = slides.length;
+
+  // Clone first and last photo for infinite scroll
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slideCount - 1].cloneNode(true);
+  firstClone.classList.add('clone');
+  lastClone.classList.add('clone');
+  track.insertBefore(lastClone, slides[0]);
+  track.appendChild(firstClone);
+
+  slides = Array.from(track.querySelectorAll('.photo'));
 
   // Create dots container
-  const dotsContainer = document.createElement('div');
-  dotsContainer.className = 'carousel-dots';
-  const dotButtons = slides.map((_, i) => {
+  let dotsContainer = carousel.querySelector('.carousel-dots');
+  if (!dotsContainer) {
+    dotsContainer = document.createElement('div');
+    dotsContainer.className = 'carousel-dots';
+    carousel.appendChild(dotsContainer);
+  }
+  const dotButtons = Array.from({length: slideCount}, (_, i) => {
     const b = document.createElement('button');
     b.setAttribute('aria-label', `Go to slide ${i + 1}`);
     dotsContainer.appendChild(b);
     return b;
   });
-  carousel.appendChild(dotsContainer);
 
-  // Helper: find index of slide closest to carousel center
+  // Helper: find index of slide closest to carousel center (excluding clones)
   const getCenteredIndex = () => {
     const center = track.scrollLeft + track.clientWidth / 2;
     let closestIndex = 0;
     let closestDist = Infinity;
     slides.forEach((s, idx) => {
+      if (s.classList.contains('clone')) return;
       const sCenter = s.offsetLeft + s.getBoundingClientRect().width / 2;
       const d = Math.abs(center - sCenter);
-      if (d < closestDist) { closestDist = d; closestIndex = idx; }
+      if (d < closestDist) { closestDist = d; closestIndex = idx - 1; }
     });
-    return closestIndex;
+    // closestIndex is -1 for lastClone, 0 for first real, ...
+    return Math.max(0, Math.min(slideCount - 1, closestIndex));
   };
 
   // Scroll so slide at index i is centered
   const scrollToIndex = (i) => {
-    if (i < 0) i = 0; if (i >= slides.length) i = slides.length - 1;
-    const s = slides[i];
+    // i: 0..slideCount-1 (real slides)
+    const s = slides[i + 1]; // +1 for clone at start
     const offset = s.offsetLeft - (track.clientWidth - s.clientWidth) / 2;
     track.scrollTo({ left: Math.round(offset), behavior: 'smooth' });
   };
@@ -92,36 +141,18 @@ document.querySelectorAll('.carousel').forEach(carousel => {
     btn.addEventListener('click', () => scrollToIndex(i));
   });
 
-  // Lock to the closest slide after scrolling (no single-step restriction)
-  let rafPending = false;
-  let scrollTimeout = null;
-
-  track.addEventListener('scroll', () => {
-    // continuous updates for dots while scrolling
-    if (!rafPending) {
-      rafPending = true;
-      window.requestAnimationFrame(() => {
-        updateDots();
-        rafPending = false;
-      });
-    }
-
-    // debounce scroll end
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      const target = getCenteredIndex();
-      scrollToIndex(target);
-      updateDots();
-    }, 120);
-  });
+  // Standard carousel scroll logic (no infinite scroll)
+  track.addEventListener('scroll', updateDots);
 
   // Keyboard support when focus inside carousel
   carousel.setAttribute('tabindex', '0');
   carousel.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') { const idx = getCenteredIndex(); scrollToIndex(idx + 1); }
-    if (e.key === 'ArrowLeft') { const idx = getCenteredIndex(); scrollToIndex(idx - 1); }
+    const idx = getCenteredIndex();
+    if (e.key === 'ArrowRight') scrollToIndex((idx + 1) % slideCount);
+    if (e.key === 'ArrowLeft') scrollToIndex((idx - 1 + slideCount) % slideCount);
   });
 
-  // Initialize dots to reflect starting position
+  // Initialize to first real slide
+  scrollToIndex(0);
   updateDots();
 });
